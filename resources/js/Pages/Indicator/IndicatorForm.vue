@@ -7,13 +7,13 @@ import { useForm } from "@inertiajs/vue3";
 import { defineProps } from "vue";
 
 const props = defineProps({
-    tool: Object,
+    indicator: Object,
 });
 
 const form = useForm({
-    id: props.tool ? props.tool.id : "",
-    name: props.tool ? props.tool.name : "",
-    description: props.tool ? props.tool.description : "",
+    id: props.indicator ? props.indicator.id : "",
+    name: props.indicator ? props.indicator.name : "",
+    description: props.indicator ? props.indicator.description : "",
 });
 
 const toTitleCase = (str) => {
@@ -23,13 +23,13 @@ const toTitleCase = (str) => {
 };
 
 const submit = () => {
-    if (props.tool) {
-        form.put(route('tools.update', props.tool), {
+    if (props.indicator) {
+        form.put(route('indicators.update', props.indicator), {
             preserveScroll: true,
             onSuccess: () => emit('close-modal')
         });
     } else {
-        form.post(route("tools.store"), {
+        form.post(route("indicators.store"), {
             preserveScroll: true,
             onSuccess: () => emit("close-modal"),
         });
@@ -44,12 +44,12 @@ const emit = defineEmits(["close-modal"]);
     <form @submit.prevent="submit">
         <div class="bg-white shadow-md rounded-md p-4">
             <div class="text-lg sm:text-xl text-slate-800 font-bold mb-4 border-b-2">
-                {{ form.id == 0 ? "Registrar Herramienta" : "Actualizar Herramienta" }}
+                {{ form.id == 0 ? "Registrar Indicador" : "Actualizar Indicador" }}
             </div>
             <div class="mb-4">
                 <div class="grid grid-cols-6 gap-3">
                     <div class="col-span-6 sm:col-span-6">
-                        <InputLabel value="Nombre" /> 
+                        <InputLabel value="Nombre" />
                         <TextInput
                             class="w-full"
                             v-model="form.name"

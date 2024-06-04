@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tool extends Model
+class Indicator extends Model
 {
     use HasFactory;
-
     protected $guarded = [];
-
-    public function indicators()
+    
+    public function tools()
     {
-        return $this->belongsToMany(Indicator::class, 'tool_indicator');
+        return $this->belongsToMany(Tool::class, 'tool_indicator');
     }
 }

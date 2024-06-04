@@ -12,7 +12,7 @@ use Inertia\Response;
 
 class ToolController extends Controller
 {
-    public function index(): Response
+    public function index(): Response 
     {
         $tools = Tool::orderBy('id', 'desc')->paginate(7);
         return Inertia::render('Tool/Index', compact('tools'));

@@ -4,42 +4,42 @@ import Pagination from "@/Components/Pagination.vue";
 import { ref, defineProps } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import Modal from "@/Components/Modal.vue";
-import ToolForm from "./ToolForm.vue";
+import IndicatorForm from "./IndicatorForm.vue";
 import Swal from "sweetalert2";
 
-let toolObj = ref(null);
+let indicatorObj = ref(null);
 let showModal = ref(false);
 
 const props = defineProps({
-    tools: Object,
+    indicators: Object,
     texto: String,
 });
 
 let query = ref(props.texto);
 
 const form = useForm({
-    tool: Object,
+    indicator: Object,
 });
 
-const addTool = () => {
-    toolObj.value = null;
+const addIndicator = () => {
+    indicatorObj.value = null;
     showModal.value = true;
 };
 
-const editTool = (tool) => {
-    toolObj.value = tool;
+const editIndicator = (indicator) => {
+    indicatorObj.value = indicator;
     showModal.value = true;
 };
 
 const closeModal = () => {
-    toolObj.value = null;
+    indicatorObj.value = null;
     showModal.value = false;
 };
 
-const changeStatus = (tool) => {
+const changeStatus = (indicator) => {
     Swal.fire({
         title: "¿Estás seguro?",
-        text: "¿Quieres cambiar el estado de la Herramienta?",
+        text: "¿Quieres cambiar el estado del Indicador?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -48,7 +48,7 @@ const changeStatus = (tool) => {
         cancelButtonText: "No, cancelar!",
     }).then((result) => {
         if (result.isConfirmed) {
-            form.put(route("tools.change", tool), {
+            form.put(route("indicators.change", indicator), {
                 preserveScroll: true,
             });
         }
@@ -56,24 +56,19 @@ const changeStatus = (tool) => {
 };
 
 const search = () => {
-    form.get(route("tools.search", { texto: query.value }));
+    form.get(route("indicators.search", { texto: query.value }));
 };
 
 const goToIndex = () => {
-    form.get(route("tools.index"));
+    form.get(route("indicators.index"));
 };
-
-const goToToolIndicators = (toolId) => {
-    form.get(route('toolIndicators.index', { tool_id: toolId }));
-};
-
 </script>
 
 <template>
-    <AppLayout title="Herramientas">
+    <AppLayout title="Indicadores">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Gestionar Herramientas
+                Gestionar Indicadores
             </h2>
         </template>
 
@@ -86,7 +81,7 @@ const goToToolIndicators = (toolId) => {
                                 type="text"
                                 v-model="query"
                                 class="w-auto lg:w-96 hover:border-sky-300 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                                placeholder="Buscar Categoria"
+                                placeholder="Buscar Indicador"
                                 @keyup.enter="search"
                             />
                             <button
@@ -102,10 +97,10 @@ const goToToolIndicators = (toolId) => {
                         <div>
                             <button
                                 class="bg-sky-900 hover:bg-sky-800 p-2 text-white rounded-lg flex items-center"
-                                @click="addTool"
+                                @click="addIndicator"
                             >
                                 <v-icon name="io-add-circle-sharp" />
-                                <p class="sm:block hidden ml-2">agregar</p>
+                                <p class="sm:block hidden ml-2">Agregar</p>
                             </button>
                         </div>
                     </div>
@@ -125,7 +120,7 @@ const goToToolIndicators = (toolId) => {
                                             scope="col"
                                             class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-left"
                                         >
-                                            Descripcion
+                                            Descripción
                                         </th>
                                         <th
                                             scope="col"
@@ -145,18 +140,18 @@ const goToToolIndicators = (toolId) => {
                                     class="bg-white divide-y divide-gray-200"
                                 >
                                     <tr
-                                        v-for="tool in tools.data"
-                                        :key="tool.id"
+                                        v-for="indicator in indicators.data"
+                                        :key="indicator.id"
                                     >
                                         <td
                                             class="text-xs md:text-sm px-6 py-4 whitespace-nowrap"
                                         >
-                                            {{ tool.name }}
+                                            {{ indicator.name }}
                                         </td>
                                         <td
                                             class="text-xs md:text-sm px-6 py-4 whitespace-nowrap"
                                         >
-                                            {{ tool.description }}
+                                            {{ indicator.description }}
                                         </td>
                                         <td
                                             class="text-xs md:text-sm px-6 py-3 whitespace-nowrap text-center"
@@ -165,13 +160,13 @@ const goToToolIndicators = (toolId) => {
                                                 class="inline-block px-2 rounded-md h-auto justify-center items-center text-xs md:text-sm"
                                                 :class="{
                                                     ' bg-green-500 text-white':
-                                                        tool.status == 1,
+                                                        indicator.status == 1,
                                                     'bg-red-500 rounded text-white':
-                                                        tool.status == 0,
+                                                        indicator.status == 0,
                                                 }"
                                             >
                                                 {{
-                                                    tool.status == 1
+                                                    indicator.status == 1
                                                         ? "ACTIVO"
                                                         : "INACTIVO"
                                                 }}
@@ -183,24 +178,24 @@ const goToToolIndicators = (toolId) => {
                                         >
                                             <button
                                                 class="bg-yellow-500 text-white p-1 rounded-md hover:bg-yellow-600 cursor-pointer mr-1"
-                                                @click="editTool(tool)"
+                                                @click="editIndicator(indicator)"
                                             >
                                                 <v-icon
                                                     name="md-modeedit-round"
                                                 />
                                             </button>
                                             <button
-                                                class="text-white p-1 rounded-md mr-1"
+                                                class="text-white p-1 rounded-md"
                                                 :class="{
                                                     'bg-orange-500 hover:bg-orange-400':
-                                                        tool.status == 1,
+                                                        indicator.status == 1,
                                                     'bg-green-500 hover:bg-green-400':
-                                                        tool.status == 0,
+                                                        indicator.status == 0,
                                                 }"
-                                                @click="changeStatus(tool)"
+                                                @click="changeStatus(indicator)"
                                             >
                                                 <v-icon
-                                                    v-if="tool.status == 1"
+                                                    v-if="indicator.status == 1"
                                                     name="gi-cancel"
                                                 />
                                                 <v-icon
@@ -208,17 +203,10 @@ const goToToolIndicators = (toolId) => {
                                                     name="fa-check"
                                                 />
                                             </button>
-                                            <button
-                                                class="bg-blue-500 text-white p-1 rounded-md hover:bg-blue-600 cursor-pointer mr-1"
-                                                @click="goToToolIndicators(tool.id)"
-                                            >
-                                                <v-icon
-                                                    name="bi-file-earmark-arrow-up-fill"
-                                                />
-                                            </button>
+
                                         </td>
                                     </tr>
-                                    <tr v-if="tools.data.length <= 0">
+                                    <tr v-if="indicators.data.length <= 0">
                                         <td class="text-center" colspan="3">
                                             No hay registros
                                         </td>
@@ -226,7 +214,7 @@ const goToToolIndicators = (toolId) => {
                                 </tbody>
                             </table>
                         </div>
-                        <Pagination class="mt-2" :pagination="tools" />
+                        <Pagination class="mt-2" :pagination="indicators" />
                     </div>
 
                     <Modal
@@ -234,7 +222,7 @@ const goToToolIndicators = (toolId) => {
                         @close="showModal = false"
                         maxWidth="xl"
                     >
-                        <ToolForm :tool="toolObj" @close-modal="closeModal" />
+                        <IndicatorForm :indicator="indicatorObj" @close-modal="closeModal" />
                     </Modal>
                 </div>
             </div>
